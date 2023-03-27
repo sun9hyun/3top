@@ -47,8 +47,8 @@ public class BoardController {
         return "/board/reload";
     }
 //    게시글 조회
-    @GetMapping("/read")
-    public String read(Long boardNumber, Model model){
+    @GetMapping("/read/{boardNumber}")
+    public String read(@PathVariable Long boardNumber, Model model){
         model.addAttribute("board", boardService.findById(boardNumber));
         return"/board/read";
     }

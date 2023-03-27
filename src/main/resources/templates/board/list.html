@@ -60,7 +60,9 @@
                             <td class="check"><input type="checkbox" name="checkRow" id="chBox"></td>
                             <!--역순(size-index)-->
                             <td class="bno" th:text="${boardStat.size - boardStat.index}"></td>
-                            <td class="title"><a onclick="popupList()" class="read" th:text="*{boardTitle}" th:href="@{/board/read(boardNumber=*{boardNumber})}"></a></td>
+                            <td class="title" th:name="readTitle" >
+                                <input type="hidden" name="inputNo" class="boardNo" th:value="*{boardNumber}">
+                                <a class="read" th:text="*{boardTitle}"></a></td>
                             <td class="writer" th:text="*{boardWriter}"></td>
                             <td class="regDate" th:text="*{boardRegisterDate}"></td>
                             <td class="delete"><a class="deleteBoard" th:href="@{/board/delete(boardNumber=*{boardNumber})}"><input type="submit" class="button" value="삭제"/></a></td>
@@ -81,36 +83,29 @@
 <script src="/js/jquery-3.6.4.js"></script>
 <script th:inline="javascript">
 
-    //boardNumber 가져오기
-    // const boardNo = [];
-    //
-    // $("input:checkbox[name=checkRow]").each(function(){
-    //     boardNo.push($(this).val());
-    // });
-
-    const $boardNo = $("input:hidden[name=inputNo]");
-
-
-
+    /*글 등록*/
     function popup(){
         window.open('/board/write','board','width=1000,height=1000');
     };
 
-    function popupList(){
-        window.open('/board/read?boardNumber='+ $boardNo ,'board','width=1000,height=1000');
-        console.log($boardNo)
-    };
+    /*상세 보기*/
+    $(document).on("click","td[name='readTitle']",function () {
+        const $boardNo = $(this).children('.boardNo').val();
+        window.open('/board/read/'+ $boardNo ,'board','width=1000,height=1000');
+    })
 
-        //체크박스 전체 선탣&해제
+    /*체크박스 전체 선탣&해제*/
         $('#allChecked').click(function(){
-            if($("#allChecked").prop("checked")){
+            if($('this').prop('checked')){
                 $("input[type=checkbox]").prop("checked",true); //this 본인 자신 가져오기
             }else{
                 $("input[type=checkbox]").prop("checked",false);
             }
         });
 
-    // 체크박스 삭제
+
+
+    /*체크박스 삭제*/
     function boardDelete(){
         const boardIdxArray = [];
         $("input:checkbox[name=checkRow]:checked").each(function(){

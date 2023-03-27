@@ -3,12 +3,19 @@
 <mapper namespace="app.top3.mapper.BoardMapper">
 <!--게시글 목록-->
     <select id="getList" resultType="BoardVO">
-        SELECT BOARD_NUMBER, BOARD_TITLE, BOARD_WRITER, BOARD_CONTENT, BOARD_REGISTER_DATE FROM TBL_BOARD ORDER BY BOARD_NUMBER DESC
+        SELECT BOARD_NUMBER, BOARD_TITLE, BOARD_WRITER, BOARD_CONTENT, BOARD_REGISTER_DATE FROM TBL_BOARD
+        <where>
+        <include refid="search"/>
+        </where>
+        ORDER BY BOARD_NUMBER DESC
     </select>
 
 <!--게시글 총 갯수-->
     <select id="getTotalList" resultType="int">
         SELECT COUNT(BOARD_NUMBER) FROM TBL_BOARD
+        <where>
+        <include refid="search"/>
+        </where>
     </select>
 
 <!--게시글 등록-->
@@ -35,5 +42,24 @@
         WHERE BOARD_NUMBER = #{boardNumber}
     </delete>
 
+<!--게시글 검색-->
+    <sql id="search">
+        <if test="keyword != null">
+            <trim prefix="(" suffix=")" prefixOverrides="OR">
+                <foreach item="type" collection="types">
+                    <trim prefix="OR">
+                        <choose>
+                            <when test="type == 'title'.toString()">
+                                BOARD_TITLE LIKE '%' || #{keyword} || '%'
+                            </when>
+                            <when test="type == 'writer'.toString()">
+                                BOARD_WRITER LIKE '%' || #{keyword} || '%'
+                            </when>
+                        </choose>
+                    </trim>
+                </foreach>
+            </trim>
+        </if>
+    </sql>
 
 </mapper>

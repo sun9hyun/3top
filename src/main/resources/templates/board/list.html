@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Board</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="/css/main.css" type="text/css"/>
+    <style>
+        .optionBoard{
+            margin-bottom: 30px;
+        }
+
+        #choice{
+            margin-bottom: 10px;
+        }
+
+        #searchBoard{
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body class="is-preload">
+<!-- Main -->
+<div id="main">
+    <div class="wrapper">
+        <div class="inner">
+            <!-- Elements -->
+            <header class="major">
+                <h1>Board</h1>
+                <p>게시판 목록</p>
+            </header>
+            <div class="optionBoard">
+            <select id="choice" >
+                <option value="none">선택</option>
+                <option value="01">제목</option>
+                <option value="02">작성자</option>
+            </select>
+            <input type="text" placeholder="검색" id="searchBoard">
+            <input type="button" value="조회">
+            <input type="button" class="selectDelete" th:value="삭제" onclick="boardDelete()">
+<!--                <h3>총</h3>-->
+            </div>
+            <!-- Table -->
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                    <tr class="tHead">
+                        <th class="check"><input type="checkbox" id="allChecked"></th>
+                        <th class="bno">번호</th>
+                        <th class="title">제목</th>
+                        <th class="writer">작성자</th>
+                        <th class="regDate">작성일</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <th:block th:each="board:${boards}">
+                        <tr class="tBody" th:object="${board}">
+                            <td class="check"><input type="checkbox" name="checkRow" id="chBox"></td>
+                            <!--역순(size-index)-->
+                            <td class="bno" th:text="${boardStat.size - boardStat.index}"></td>
+                            <td class="title"><a onclick="popupList()" class="read" th:text="*{boardTitle}" th:href="@{/board/read(boardNumber=*{boardNumber})}"></a></td>
+                            <td class="writer" th:text="*{boardWriter}"></td>
+                            <td class="regDate" th:text="*{boardRegisterDate}"></td>
+                            <td class="delete"><a class="deleteBoard" th:href="@{/board/delete(boardNumber=*{boardNumber})}"><input type="submit" class="button" value="삭제"/></a></td>
+                        </tr>
+                    </th:block>
+                    </tbody>
+                </table>
+                <h3><button class="write button small" onclick="popup()" >
+                    글 등록
+                </button></h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script src="/js/jquery-3.6.4.js"></script>
+<script th:inline="javascript">
+
+    //boardNumber 가져오기
+    // const boardNo = [];
+    //
+    // $("input:checkbox[name=checkRow]").each(function(){
+    //     boardNo.push($(this).val());
+    // });
+
+    const $boardNo = $("input:hidden[name=inputNo]");
+
+
+
+    function popup(){
+        window.open('/board/write','board','width=1000,height=1000');
+    };
+
+    function popupList(){
+        window.open('/board/read?boardNumber='+ $boardNo ,'board','width=1000,height=1000');
+        console.log($boardNo)
+    };
+
+        //체크박스 전체 선탣&해제
+        $('#allChecked').click(function(){
+            if($("#allChecked").prop("checked")){
+                $("input[type=checkbox]").prop("checked",true); //this 본인 자신 가져오기
+            }else{
+                $("input[type=checkbox]").prop("checked",false);
+            }
+        });
+
+    // 체크박스 삭제
+    function boardDelete(){
+        const boardIdxArray = [];
+        $("input:checkbox[name=checkRow]:checked").each(function(){
+            boardIdxArray.push($(this).val());
+        });
+        console.log(boardIdxArray);
+
+        if(boardIdxArray == ""){
+            alert("삭제할 항목을 선택 해주세요.");
+            return false;
+        }
+    }
+
+
+
+</script>
+</body>
+</html>

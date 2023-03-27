@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Board</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="/css/main.css" />
+    <style>
+        .uploadResult ul {
+            display: flex;
+            list-style: none;
+        }
+        h4 {
+            margin: 0;
+        }
+        .line{
+            border-bottom: 1px solid #ff8b77;
+        }
+        p {
+            margin: 0;
+        }
+
+        textarea {
+            resize: none;
+        }
+    </style>
+</head>
+<body class="is-preload">
+<!-- Main -->
+<div id="main">
+    <div class="wrapper">
+        <div class="inner">
+
+            <!-- Elements -->
+            <header class="major">
+                <h1>Board</h1>
+                <p>게시글 상세보기</p>
+            </header>
+            <!-- Table -->
+            <h3><a class="list button small" th:href="@{/board/list}">목록 보기</a></h3>
+            <div class="content">
+                <div class="form">
+                    <form method="post" th:action="@{/board/read}" th:object="${board}">
+                        <div class="fields">
+                            <div class="field">
+                                <h4>번호</h4>
+                                <input type="text" th:field="*{boardNumber}" readonly/>
+                            </div>
+                            <div class="field">
+                                <h4>제목</h4>
+                                <input type="text" th:field="*{boardTitle}" readonly/>
+                            </div>
+                            <div class="field">
+                                <h4>내용</h4>
+                                <textarea rows="6" style="resize:none" readonly th:field="*{boardContent}"></textarea>
+                            </div>
+                            <div class="field">
+                                <h4>작성자</h4>
+                                <input type="text" th:field="*{boardWriter}" readonly/>
+                            </div>
+                        </div>
+                        <ul class="actions special">
+                            <li>
+                                <a th:href="@{/board/update(boardNumber=*{boardNumber})}">
+                                <input type="button" class="button" value="수정"/>
+                                </a>
+                            </li>
+                        </ul>
+                    </form>
+                    <div class="paging" style="text-align: center"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Scripts -->
+<script src="/js/jquery-3.6.4.js"></script>
+<script th:inline="javascript">
+
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+

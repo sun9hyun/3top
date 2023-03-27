@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="app.top3.mapper.BoardMapper">
+<!--게시글 목록-->
+    <select id="getList" resultType="BoardVO">
+        SELECT BOARD_NUMBER, BOARD_TITLE, BOARD_WRITER, BOARD_CONTENT, BOARD_REGISTER_DATE FROM TBL_BOARD ORDER BY BOARD_NUMBER DESC
+    </select>
+
+<!--게시글 총 갯수-->
+    <select id="getTotalList" resultType="int">
+        SELECT COUNT(BOARD_NUMBER) FROM TBL_BOARD
+    </select>
+
+<!--게시글 등록-->
+    <insert id="write">
+        INSERT INTO TBL_BOARD(BOARD_TITLE, BOARD_WRITER, BOARD_CONTENT)
+        VALUES(#{boardTitle}, #{boardWriter}, #{boardContent})
+    </insert>
+
+<!--게시글 상세보기-->
+    <select id="showList" resultType="BoardVO">
+        SELECT BOARD_NUMBER, BOARD_TITLE, BOARD_WRITER, BOARD_CONTENT, BOARD_REGISTER_DATE FROM TBL_BOARD WHERE BOARD_NUMBER = #{boardNumber}
+    </select>
+
+<!--게시글 수정-->
+    <update id="updateList">
+        UPDATE TBL_BOARD
+        SET BOARD_TITLE = #{boardTitle}, BOARD_CONTENT = #{boardContent}
+        WHERE BOARD_NUMBER = #{boardNumber}
+    </update>
+
+<!--게시글 삭제-->
+    <delete id="deleteList">
+        DELETE FROM TBL_BOARD
+        WHERE BOARD_NUMBER = #{boardNumber}
+    </delete>
+
+
+</mapper>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Board</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="/css/main.css" />
+    <style>
+        .uploadResult ul {
+            display: flex;
+            list-style: none;
+        }
+
+        .uploadResult ul li {
+            position: relative;
+        }
+
+        .uploadResult ul li span {
+            display: block;
+            position: absolute;
+            right: 10px;
+            top: -25px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+        .field-errors{
+            color: red;
+        }
+    </style>
+</head>
+<body class="is-preload">
+<!-- Main -->
+<div id="main">
+    <div class="wrapper">
+        <div class="inner">
+            <!-- Elements -->
+            <header class="major">
+                <h1>Board</h1>
+                <p>게시글 등록</p>
+            </header>
+            <!-- Table -->
+            <h3><a class="list button small" th:href="@{/board/list}">목록 보기</a></h3>
+            <div class="content">
+                <div class="form">
+                    <form method="post" th:action id="writeForm" th:object="${board}">
+                        <div class="fields">
+                            <div class="field">
+                                <h4>제목</h4>
+                                <input th:field="*{boardTitle}" placeholder="Title" type="text" class="form_control" th:errorclass="field-errors"/>
+                                <div class="field-errors" th:errors="*{boardTitle}">Incorrect Title</div>
+                            </div>
+                            <div class="field">
+                                <h4>내용</h4>
+                                <textarea th:field="*{boardContent}" rows="6" placeholder="Content" style="resize:none" th:errorclass="field-errors"></textarea>
+                                <div class="field-errors" th:errors="*{boardContent}">Incorrect Content</div>
+                            </div>
+                            <div class="field">
+                                <h4>작성자</h4>
+                                <input th:field="*{boardWriter}" placeholder="Writer" type="text" th:errorclass="field-errors"/>
+                                <div class="field-errors" th:errors="*{boardWriter}">Incorrect Writer</div>
+                            </div>
+
+                        <ul class="actions special">
+                            <li><input type="submit" class="button" value="등록"/></li>
+                        </ul>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<!-- Scripts -->
+<script src="/js/jquery-3.6.4.js"></script>
+<script th:inline="javascript">
+
+</script>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

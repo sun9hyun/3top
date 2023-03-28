@@ -2,6 +2,7 @@ package app.top3.service;
 
 
 import app.top3.domain.vo.BoardVO;
+import app.top3.domain.vo.ListDTO;
 import app.top3.mapper.BoardMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,10 +15,13 @@ import java.util.List;
 @Slf4j
 public class BoardService {
     private final BoardMapper boardMapper;
-
+//    게시글 전체
+    public int total(ListDTO listDTO){
+        return boardMapper.getTotalList(listDTO);
+    }
 //    게시글 목록
-    public List<BoardVO> showAll(){
-        return boardMapper.getList();}
+    public List<BoardVO> showAll(ListDTO listDTO){
+        return boardMapper.getList(listDTO);}
 //    게시글 등록
     public void register(BoardVO boardVO){boardMapper.write(boardVO);}
 //    게시글 조회

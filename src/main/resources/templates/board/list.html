@@ -32,15 +32,15 @@
                 <p>게시판 목록</p>
             </header>
             <div class="optionBoard">
-            <select id="choice" >
-                <option value="none">선택</option>
-                <option value="01">제목</option>
-                <option value="02">작성자</option>
-            </select>
-            <input type="text" placeholder="검색" id="searchBoard">
-            <input type="button" value="조회">
+                <form th:action name="searchForm" th:object="${listDTO}">
+                    <select id="choice" name="type">
+                        <option value="T" th:selected="*{type} == 'T'">제목</option>
+                        <option value="W" th:selected="*{type} =='W'">작성자</option>
+                    </select>
+            <input type="text" placeholder="검색" id="searchBoard" th:field="*{keyword}" th:value="*{keyword}">
+            <input type="submit" value="조회" id="searchList" >
+                </form>
             <input type="button" class="selectDelete" th:value="삭제" onclick="boardDelete()">
-<!--                <h3>총</h3>-->
             </div>
             <!-- Table -->
             <div class="table-wrapper">
@@ -65,7 +65,7 @@
                                 <a class="read" th:text="*{boardTitle}"></a></td>
                             <td class="writer" th:text="*{boardWriter}"></td>
                             <td class="regDate" th:text="*{boardRegisterDate}"></td>
-                            <td class="delete"><a class="deleteBoard" th:href="@{/board/delete(boardNumber=*{boardNumber})}"><input type="submit" class="button" value="삭제"/></a></td>
+                            <td class="delete"><a  class="deleteBoard" th:href="@{/board/delete(boardNumber=*{boardNumber})}"><input type="submit" class="button" value="삭제"/></a></td>
                         </tr>
                     </th:block>
                     </tbody>
@@ -73,6 +73,22 @@
                 <h3><button class="write button small" onclick="popup()" >
                     글 등록
                 </button></h3>
+                <div th:object="${pagination}">
+                    <div style="text-align: center">
+                        <a class="changePage" th:href="*{startPage - 1}" th:if="*{prev}"></a>
+                        <th:block th:each="page:${#numbers.sequence(pagination.startPage, pagination.endPage)}">
+                            <a class="changePage" th:href="${page}" th:if="${pagination.listDTO.page != page}"><code th:text="${page}"></code></a>
+                            <code th:unless="${pagination.listDTO.page != page}" th:text="${page}"></code>
+                        </th:block>
+                        <a class="changePage" th:href="*{endPage + 1}" th:if="*{next}"></a>
+                    </div>
+                    <form th:action="@{/board/list}" th:object="${listDTO}" name="pageForm">
+                        <input type="hidden" th:field="*{page}">
+                        <input type="hidden" th:field="*{amount}">
+                        <input type="hidden" th:field="*{type}">
+                        <input type="hidden" th:field="*{keyword}">
+                    </form>
+                </div>
                 </div>
             </div>
         </div>
@@ -82,6 +98,7 @@
 <!-- Scripts -->
 <script src="/js/jquery-3.6.4.js"></script>
 <script th:inline="javascript">
+
 
     /*글 등록*/
     function popup(){
@@ -95,14 +112,24 @@
     })
 
     /*체크박스 전체 선택&해제*/
-        $('#allChecked').click(function(){
-            if($('#allChecked').prop('checked')){
-                $("input[type=checkbox]").prop("checked",true); //this 본인 자신 가져오기
-            }else{
-                $("input[type=checkbox]").prop("checked",false);
-            }
-        });
+    const $chkList = $("input[name=checkRow]");
 
+    $("#allChecked").on("click", function(){
+        if($(this).is(":checked")){
+            $chkList.prop("checked", true);
+        }else
+            $chkList.prop("checked", false);
+
+    });
+
+    $chkList.on("click",function () {
+        const $total = $chkList.length;
+        const $checked = $("input[name=checkRow]:checked").length;
+        if($total !== $checked) {
+            $("#allChecked").prop("checked", false);
+        } else
+            $("#allChecked").prop("checked", true);
+    });
 
     /*체크박스 삭제*/
     function boardDelete(){
@@ -117,7 +144,6 @@
             return false;
         }
     }
-
 
 
 </script>

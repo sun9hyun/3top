@@ -1,6 +1,8 @@
 package app.top3.controller;
 
 import app.top3.domain.vo.BoardVO;
+import app.top3.domain.vo.ListDTO;
+import app.top3.domain.vo.PageDTO;
 import app.top3.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,8 +27,15 @@ public class BoardController {
 
 //    게시글 목록
     @GetMapping("/list")
-    public void list(Model model){
-        model.addAttribute("boards",boardService.showAll());
+    public void list(@ModelAttribute ListDTO listDTO,Model model){
+        PageDTO pageDTO = new PageDTO();
+        if(listDTO.getPage() ==0){
+            listDTO.createListDTO();
+        }
+        pageDTO.createPageDTO(listDTO,boardService.total(listDTO));
+        model.addAttribute("boards",boardService.showAll(listDTO));
+        model.addAttribute("listDTO", listDTO);
+        model.addAttribute("pagination",pageDTO);
     }
 
 //    게시글 등록
@@ -39,7 +48,6 @@ public class BoardController {
     public String write(@Validated @ModelAttribute("board") BoardVO boardVO, BindingResult result) {
 
         if(result.hasErrors()){
-            log.info("쓰기 예외 발생 = {}", result);
             return "/board/write";
         }
 
@@ -63,7 +71,7 @@ public class BoardController {
     public String update(BoardVO boardVO, RedirectAttributes redirectAttributes){
         redirectAttributes.addAttribute("boardNumber", boardVO.getBoardNumber());
         boardService.modify(boardVO);
-        return "redirect:/board/read";
+        return "board/reload";
     }
 
 //    게시글 삭제

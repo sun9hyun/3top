@@ -75,13 +75,18 @@
                 </button></h3>
                 <div th:object="${pagination}">
                     <div style="text-align: center">
-                        <a class="changePage" th:href="*{startPage - 1}" th:if="*{prev}"></a>
+
+                        <a class="changePage" th:href="*{startPage - 1}" th:if="*{prev}"><h2><</h2></a>
+
                         <th:block th:each="page:${#numbers.sequence(pagination.startPage, pagination.endPage)}">
                             <a class="changePage" th:href="${page}" th:if="${pagination.listDTO.page != page}"><code th:text="${page}"></code></a>
                             <code th:unless="${pagination.listDTO.page != page}" th:text="${page}"></code>
                         </th:block>
-                        <a class="changePage" th:href="*{endPage + 1}" th:if="*{next}"></a>
+
+                        <a class="changePage" th:href="*{endPage + 1}" th:if="*{next}"><h2>></h2><</a>
+
                     </div>
+                </div>
                     <form th:action="@{/board/list}" th:object="${listDTO}" name="pageForm">
                         <input type="hidden" th:field="*{page}">
                         <input type="hidden" th:field="*{amount}">
@@ -93,7 +98,7 @@
             </div>
         </div>
     </div>
-</div>
+
 
 <!-- Scripts -->
 <script src="/js/jquery-3.6.4.js"></script>
@@ -144,6 +149,7 @@
             return false;
         }
     }
+
 
 
 </script>

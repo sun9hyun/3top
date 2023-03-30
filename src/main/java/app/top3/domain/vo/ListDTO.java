@@ -7,17 +7,17 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class ListDTO {
     private int page;
     private int amount;
+    private int skip;
     private String type;
     private String keyword;
 
     public void createListDTO(int page, int amount) {
         this.page = page;
         this.amount = amount;
+        this.skip = (page - 1) * amount;
     }
 
-    public void createListDTO(){
-        createListDTO(1,10);
-    }
+    public void createListDTO(){ createListDTO(1,10); }
 
     public String getQueryString(){
         UriComponentsBuilder builder = UriComponentsBuilder.fromPath("")

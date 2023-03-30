@@ -59,7 +59,8 @@
                         <tr class="tBody" th:object="${board}">
                             <td class="check"><input type="checkbox" name="checkRow" id="chBox"></td>
                             <!--역순(size-index)-->
-                            <td class="bno" th:text="${boardStat.size - boardStat.index}"></td>
+                            <!--총 페이지 수 - (현재 페이지-1)* 페이지 양-->
+                            <td class="bno" th:text="${pagination.total} - ((${listDTO.page}-1) * ${listDTO.amount})  - ${boardStat.index}"></td>
                             <td class="title" th:name="readTitle" >
                                 <input type="hidden" name="inputNo" class="boardNo" th:value="*{boardNumber}">
                                 <a class="read" th:text="*{boardTitle}"></a></td>
@@ -75,20 +76,15 @@
                 </button></h3>
                 <div th:object="${pagination}">
                     <div style="text-align: center">
-
-                        <a class="changePage" th:href="*{startPage - 1}" th:if="*{prev}"><h2><</h2></a>
-
+                        <!--페이지 넘버-->
                         <th:block th:each="page:${#numbers.sequence(pagination.startPage, pagination.endPage)}">
-                            <a class="changePage" th:href="${page}" th:if="${pagination.listDTO.page != page}"><code th:text="${page}"></code></a>
+                            <a class="changePage"  th:href="${page}" th:if="${pagination.listDTO.page != page}"><code th:text="${page}"></code></a>
                             <code th:unless="${pagination.listDTO.page != page}" th:text="${page}"></code>
                         </th:block>
-
-                        <a class="changePage" th:href="*{endPage + 1}" th:if="*{next}"><h2>></h2><</a>
-
                     </div>
                 </div>
                     <form th:action="@{/board/list}" th:object="${listDTO}" name="pageForm">
-                        <input type="hidden" th:field="*{page}">
+                        <input type="hidden" name="page" th:vlaue="*{page}">
                         <input type="hidden" th:field="*{amount}">
                         <input type="hidden" th:field="*{type}">
                         <input type="hidden" th:field="*{keyword}">
@@ -103,6 +99,13 @@
 <!-- Scripts -->
 <script src="/js/jquery-3.6.4.js"></script>
 <script th:inline="javascript">
+    const $pages = $("a.changePage");
+
+    $pages.on("click", function(e){
+        e.preventDefault();
+        $('input[name=page]').val($(this).attr("href"));
+        document.pageForm.submit();
+    });
 
 
     /*글 등록*/
@@ -149,6 +152,8 @@
             return false;
         }
     }
+
+
 
 
 

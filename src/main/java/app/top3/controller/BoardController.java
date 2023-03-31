@@ -29,6 +29,7 @@ public class BoardController {
     @GetMapping("/list")
     public void list(@ModelAttribute ListDTO listDTO,Model model){
         PageDTO pageDTO = new PageDTO();
+        //page가 0일 경우와 아닐경우 둘다 쓰기!
         if(listDTO.getPage() ==0){
             listDTO.createListDTO();
         }else{

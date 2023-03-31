@@ -99,10 +99,11 @@
 <!-- Scripts -->
 <script src="/js/jquery-3.6.4.js"></script>
 <script th:inline="javascript">
+
     const $pages = $("a.changePage");
 
     $pages.on("click", function(e){
-        e.preventDefault();
+        e.preventDefault(); //새로고침 막아주기
         $('input[name=page]').val($(this).attr("href"));
         document.pageForm.submit();
     });

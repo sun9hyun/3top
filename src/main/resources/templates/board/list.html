@@ -84,7 +84,8 @@
                     </div>
                 </div>
                     <form th:action="@{/board/list}" th:object="${listDTO}" name="pageForm">
-                        <input type="hidden" name="page" th:vlaue="*{page}">
+                        <!--field 값은 name id 자동 생성-->
+                        <input type="hidden" th:field="*{page}">
                         <input type="hidden" th:field="*{amount}">
                         <input type="hidden" th:field="*{type}">
                         <input type="hidden" th:field="*{keyword}">

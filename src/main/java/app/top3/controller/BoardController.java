@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 @Controller
@@ -36,9 +38,7 @@ public class BoardController {
             listDTO.createListDTO(listDTO.getPage(), 10);
         }
         pageDTO.createPageDTO(listDTO,boardService.total(listDTO));
-        log.info("pageDTO = {}", pageDTO.toString());
         model.addAttribute("boards",boardService.showAll(listDTO));
-        log.info("list = {}", listDTO.toString());
         model.addAttribute("listDTO", listDTO);
         model.addAttribute("pagination",pageDTO);
     }

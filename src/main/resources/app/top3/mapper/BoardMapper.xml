@@ -54,6 +54,5 @@
         DELETE FROM TBL_BOARD
         WHERE BOARD_NUMBER = #{boardNumber}
     </delete>
-
-
+    
 </mapper>

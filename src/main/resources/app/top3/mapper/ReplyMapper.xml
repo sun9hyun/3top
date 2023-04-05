@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="app.top3.mapper.ReplyMapper">
+
+<!--댓글 등록-->
+    <insert id="insertReply">
+        INSERT INTO TBL_REPLY(REPLY_CONTENT, REPLY_WRITER, BOARD_NUMBER)
+        VALUES(#{replyContent}, #{replyWriter}, #{boardNumber})
+    </insert>
+
+    <!--댓글 목록-->
+    <select id="replyList" resultType="ReplyVO">
+        SELECT REPLY_NUMBER, REPLY_CONTENT, REPLY_WRITER, REPLY_REGISTER_DATE, REPLY_UPDATE_DATE, BOARD_NUMBER
+        FROM TBL_REPLY
+        WHERE BOARD_NUMBER = #{boardNumber}
+        ORDER BY REPLY_NUMBER DESC
+    </select>
+
+
+</mapper>
